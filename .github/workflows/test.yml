@@ -17,7 +17,7 @@ jobs:
       run: sudo apt-get update && sudo apt-get -y install build-essential
 
     - name: Download and install criterion
-      run: apt-get install libcriterion-dev
+      run: sudo apt-get install libcriterion-dev
 
     - name: configure
       run: make clean all -C . && echo "build done"

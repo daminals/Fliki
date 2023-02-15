@@ -1,0 +1,9 @@
+1c1
+< This is file2.
+---
+> this is completely different
+3d2
+< This line does not appear in file1.
+4a4,5
+> Among us sussy baka
+> hello world

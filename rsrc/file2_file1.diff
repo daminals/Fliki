@@ -1,0 +1,9 @@
+1c1,2
+< This is file2.
+---
+> This is file1.
+> This line does not appear in file2.
+3d3
+< This line does not appear in file1.
+4a5
+> This line also does not appear in file2.

@@ -30,10 +30,10 @@ To use Fliki, you will need to provide a diff file and an input file. These file
 Here is an example of how to use Fliki:
 
 ```bash
-cat input.txt | fliki diff.txt > output.txt
+cat input.txt | fliki file.diff > output.out
 ```
 
-This command will read the contents of the `input.txt` file, apply the patch contained in the `diff.txt` file, and output the result to the `output.txt` file.
+This command will read the contents of the `input.txt` file, apply the patch contained in the `file.diff` file, and output the result to the `output.out` file.
 
 ## Testing
 

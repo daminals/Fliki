@@ -18,7 +18,7 @@ jobs:
 
     - name: Download and install criterion
       run: |
-        git clone --branch v3.1.3 --depth 1 https://github.com/Snaipe/Criterion.git
+        git clone https://github.com/Snaipe/Criterion.git
         cd Criterion
         mkdir build
         cd build

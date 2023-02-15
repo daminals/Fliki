@@ -19,8 +19,9 @@ jobs:
     - name: Download and install criterion
       run: sudo apt-get install libcriterion-dev
 
-    - name: configure
+    - name: Clean bin and make
       run: make clean all -C . && echo "build done"
-    - name: test
+
+    - name: Run Test Cases
       run: bin/fliki_tests -S --verbose=0 --timeout 30
 

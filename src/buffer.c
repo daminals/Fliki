@@ -162,22 +162,20 @@ int add_to_deletion_buffer(char item) {
   // for (int i=0;i<10;i++) debug("%c,(%d)",get_arr(hunk_deletions_buffer,i),get_arr(hunk_deletions_buffer,i));
   return 0;
 }
-/*
-* THIS IS A TESTING FUNCTION. DO NOT USE IN PRODUCTION
- TODO: REMOVE THIS FUNCTION
-*/
-int adjust_additions_index(int i) {
-  additions_index += i;
-  return 0;
-}
-/*
-* THIS IS A TESTING FUNCTION. DO NOT USE IN PRODUCTION
- TODO: REMOVE THIS FUNCTION
-*/
-int adjust_deletions_index(int i) {
-  additions_index += i;
-  return 0;
-}
+// /*
+// * THIS IS A TESTING FUNCTION. DO NOT USE IN PRODUCTION
+// */
+// int adjust_additions_index(int i) {
+//   additions_index += i;
+//   return 0;
+// }
+// /*
+// * THIS IS A TESTING FUNCTION. DO NOT USE IN PRODUCTION
+// */
+// int adjust_deletions_index(int i) {
+//   additions_index += i;
+//   return 0;
+// }
 
 /*
  * this function will add terminating bytes to the end of the buffer

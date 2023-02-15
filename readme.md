@@ -14,7 +14,7 @@ git clone https://github.com/daminals/Fliki.git
 Once you have downloaded or cloned the repository, navigate to the directory and run the following command to compile the code:
 
 ```bash
-make
+make all
 ```
 
 This will create an executable file called "fliki". You can then run the program by typing:
@@ -22,7 +22,6 @@ This will create an executable file called "fliki". You can then run the program
 ```bash
 ./bin/fliki
 ```
-
 
 ## Usage
 

@@ -12,6 +12,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    
+    - name: Install build dependencies
+      run: sudo apt-get update && sudo apt-get -y install build-essential
+
+    - name: Install criterion
+      run: sudo apt-get -y install libcr-dev
+
     - name: configure
       run: make clean all -C . && echo "build done"
     - name: test

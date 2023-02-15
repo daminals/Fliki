@@ -1,4 +1,4 @@
-name: workflow
+name: main
 
 variables:
     GIT_SSL_NO_VERIFY: "true"

@@ -1,4 +1,4 @@
-![github repo badge: Language](https://img.shields.io/badge/Language-C-181717?color=blue) ![github repo badge: Testing](https://img.shields.io/badge/Testing-Criterion-181717?color=orange) ![github repo badge: OS](https://img.shields.io/badge/OS-Unix-181717?color=yellow)
+![github repo badge: Language](https://img.shields.io/badge/Language-C-181717?color=blue) ![github repo badge: Testing](https://img.shields.io/badge/Testing-Criterion-181717?color=orange) ![github repo badge: OS](https://img.shields.io/badge/OS-Unix-181717?color=yellow) [![test](https://github.com/daminals/Fliki/actions/workflows/test.yml/badge.svg)](https://github.com/daminals/Fliki/actions/workflows/test.yml)
 # Fliki
 
 Fliki is a command line function that reads a diff file and an input file from stdin, and applies a patch using the diff file to read the new output to stdout. The function is based on the Unix function "fliki" and is written in C.

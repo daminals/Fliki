@@ -11,13 +11,6 @@ Test(blackbox, fliki_minus_1_blackbox) { // -1 character
       "test_output/minus1.out";
   char *cmp = "cmp test_output/minus1.out rsrc/minus1";
 
-  FILE* a = fopen("test_output/minusch.out", "w");
-  fputc(-2, a);
-  fputc(-3, a);
-  fputc(-4, a);
-  fputc(1000, a);
-  fclose(a);
-
   int return_code = WEXITSTATUS(system(cmd));
   cr_assert_eq(return_code, EXIT_SUCCESS,
                "Program exited with 0x%x instead of EXIT_SUCCESS", return_code);

@@ -56,8 +56,12 @@ int main(int argc, char** argv) {
   // for (int i = 0; i < 200; i++) hunk_getc(&hunk, file);
   // hunk_show(&hunk, stdout);
   // for (int i = 0; i < 100; i++) hunk_getc(&hunk, file);
+  int if_fail = patch(stdin, stdout, file);
+  fclose(file);
 
-  patch(stdin, stdout, file);
+  if (if_fail == -1) return EXIT_FAILURE;
+  return EXIT_SUCCESS;
+
 
 
   // hunk_next(&hunk, file);
@@ -69,7 +73,6 @@ int main(int argc, char** argv) {
   //   c = hunk_getc(&hunk, file);
   //   if (c == ERR) {
   //     error("returned error");
-  //     // for (int i = 0; i < 25; i++) printf("%d, ", hunk_additions_buffer[i]);
   //     break;
   //   } else if (c == EOF) {
   //     debug("returned EOF");
@@ -85,8 +88,6 @@ int main(int argc, char** argv) {
   // hunk_next(&hunk, file);
   // for (int i = 0; i < 200; i++) hunk_getc(&hunk, file);
   // hunk_show(&hunk, stdout);
-  fclose(file);
-  return EXIT_SUCCESS;
 }
 
 /*

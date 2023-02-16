@@ -164,7 +164,7 @@ int add_to_deletion_buffer(char item) {
 }
 // /*
 // * THIS IS A TESTING FUNCTION. DO NOT USE IN PRODUCTION
-// */
+// */ 
 // int adjust_additions_index(int i) {
 //   additions_index += i;
 //   return 0;
@@ -177,11 +177,11 @@ int add_to_deletion_buffer(char item) {
 //   return 0;
 // }
 
-/*
- * this function will add terminating bytes to the end of the buffer
- */
-// int add_terminating_bytes() {
-//   set_arr(hunk_additions_buffer, count_additions + additions_index + 1, 0);
-//   set_arr(hunk_additions_buffer, count_additions + additions_index + 2, 0);
-//   return 0;
-// }
+// /*
+//  * this function will add terminating bytes to the end of the buffer
+//  */
+// // int add_terminating_bytes() {
+// //   set_arr(hunk_additions_buffer, count_additions + additions_index + 1, 0);
+// //   set_arr(hunk_additions_buffer, count_additions + additions_index + 2, 0);
+// //   return 0;
+// // }

@@ -1,4 +1,4 @@
-name: test
+name: Unit & Blackbox Tests
 
 on:
   push:

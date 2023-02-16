@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  Build_and_Test:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,9 +22,6 @@ jobs:
     - name: Clean bin and make
       run: make clean all -C . && echo "build done"
   
-  test:
-    runs-on: ubuntu-latest
-    steps:
     - name: Run Test Cases
       run: bin/fliki_tests -S --verbose=0 --timeout 30
 

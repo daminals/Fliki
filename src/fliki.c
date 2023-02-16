@@ -19,6 +19,7 @@ append. 0 is delete, 1 is append
   5. int hunk_getc_EOSERR: tracks whether hunk_getc has reached end of hunk
   6. int return_error: whether hunk_getc should return ERR or not
   7. int symantic_err: symantic error
+  8. int did_hunk_next_run: tracks whether hunk_next has been called after
 */
 
 // time to define some sexy global variables
@@ -235,8 +236,7 @@ int hunk_next(HUNK *hp, FILE *in) {
   char c;
   while (did_hunk_next_run == 0) {
     // printf("shawty loopin she going bananas");
-    if ((c=hunk_getc(hp, in)) == ERR) 
-      return ERR;
+    if ((c = hunk_getc(hp, in)) == ERR) return ERR;
   }
   did_hunk_next_run = 0;
   // reset hunk
@@ -244,7 +244,7 @@ int hunk_next(HUNK *hp, FILE *in) {
   hp->serial = global_hunk_serial;
   hunk_next_reset();
 
-  c = fgetc(in); // first char in section
+  c = fgetc(in);  // first char in section
 
   if (c == EOF) {
     return EOF;
@@ -320,7 +320,7 @@ int hunk_next(HUNK *hp, FILE *in) {
 /*
  interprets new lines in hunks
 */
-int hunk_read_newline(char c, char check, int expected_line_nums, FILE *in,
+int hunk_read_newline(int c, char check, int expected_line_nums, FILE *in,
                       HUNK *hp) {
   debug(
       "hunk read newline: c=%c (%d), check=%c, expected_line_nums=%d, "
@@ -370,7 +370,7 @@ int hunk_read_newline(char c, char check, int expected_line_nums, FILE *in,
 /*
   consider if c is newline. Otherwise handle regularly
 */
-int hunk_consider_newline(char c, FILE *in, HUNK *hp, int expected_line_nums,
+int hunk_consider_newline(int c, FILE *in, HUNK *hp, int expected_line_nums,
                           int if_dash) {
   /*
     if_dash = 1 if c is a <
@@ -424,7 +424,7 @@ int hunk_consider_newline(char c, FILE *in, HUNK *hp, int expected_line_nums,
         track_change_type = 1;
         current_line_nums = 0;
         newline_prev = 1;
-        return EOS; // this is for change hunks
+        return EOS;  // this is for change hunks
         // return hunk_getc(hp, in);
       } else {
         // if ((expected_line_nums < current_line_nums)) return ERR;
@@ -512,7 +512,7 @@ int hunk_getc(HUNK *hp, FILE *in) {
   // what type of hunk is this?
   if (return_error == 1) return ERR;
 
-  char c = fgetc(in);  // next character in file
+  int c = fgetc(in);  // next character in file
   int switch_addition_deletion_type = hp->type;
   // deletion mode is first for change type
   if (switch_addition_deletion_type == 3) {
@@ -657,8 +657,8 @@ void hunk_show(HUNK *hp, FILE *out) {
 int biggest_line_num;  // what is the biggest line number so far. don't be lower
 int output_file_num;   // for additions, starts at line preceding addition
 int input_file_num;    // first affected line
-char hunk_char;        // current character read with hunk_getc
-char input_char;       // current character read with fgetc
+int hunk_char;         // current character read with hunk_getc
+int input_char;        // current character read with fgetc
 
 /*
  * patch function to interpret an append hunk
@@ -696,8 +696,10 @@ static int patch_append_func(HUNK hunk, FILE *in, FILE *out, FILE *diff,
       return -1;
     }
     if (hunk_char == ERR) {
-      if (!(global_options & 4))
-        fprintf(stderr, "Error: Syntax error in hunk %d", hunk.serial);
+      if (!(global_options & 4)) {
+        fprintf(stderr, "Error: Syntax error in hunk %d\n", hunk.serial);
+        hunk_show(&hunk, stderr);
+      }
       return -1;
     }
     if (!(global_options & 2)) fputc(hunk_char, out);
@@ -742,12 +744,23 @@ static int patch_delete_func(HUNK hunk, FILE *in, FILE *out, FILE *diff) {
       return -1;
     }
     if (hunk_char == ERR) {
-      if (!(global_options & 4))
-        fprintf(stderr, "Error: Syntax error in hunk %d", hunk.serial);
+      if (!(global_options & 4)) {
+        fprintf(stderr, "Error: Syntax error in hunk %d\n", hunk.serial);
+        hunk_show(&hunk, stderr);
+      }
       return -1;
     }
     if (hunk_char == '\n') {
       input_file_num++;
+    }
+    if (hunk_char != input_char) {
+      if (!(global_options & 4)) {
+        fprintf(stderr,
+                "Error: Non-matching input characters [%c!=%c] in hunk %d\n",
+                hunk_char, input_char, hunk.serial);
+        hunk_show(&hunk, stderr);
+      }
+      return -1;
     }
     hunk_char = hunk_getc(&hunk, diff);
     input_char = fgetc(in);
@@ -817,8 +830,10 @@ int patch(FILE *in, FILE *out, FILE *diff) {
   hunk_char = hunk_getc(&hunk, diff);
   input_char = fgetc(in);
   if (contin == ERR) {
-    if (!(global_options & 4))
-      fprintf(stderr, "Error: hunk_next threw error in hunk 0");
+    if (!(global_options & 4)) {
+      fprintf(stderr, "Error: hunk_next threw error in hunk 0\n");
+      // hunk_show(&hunk, stderr);
+    }
     return -1;
   }
   biggest_line_num = hunk.old_start;
@@ -826,6 +841,13 @@ int patch(FILE *in, FILE *out, FILE *diff) {
   input_file_num = 1;   // first affected line
   // if (hunk.old_start>0)input_file_num++;
   while (contin != EOF) {
+    if (contin == ERR) {
+      if (!(global_options & 4)) {
+        fprintf(stderr, "Error: Unable to initialize hunk\n");
+        hunk_show(&hunk, stderr);
+      }
+      return -1;
+    }
     if (hunk.old_start < biggest_line_num) {
       if (!(global_options & 4))
         fprintf(stderr,
@@ -876,8 +898,10 @@ int patch(FILE *in, FILE *out, FILE *diff) {
         if (patch_append_func(hunk, in, out, diff, 1) == -1) return -1;
         break;
       default:
-        if (!(global_options & 4))
-          fprintf(stderr, "Error: Unknown hunk type in hunk %d", hunk.serial);
+        if (!(global_options & 4)) {
+          fprintf(stderr, "Error: Unknown hunk type in hunk %d\n", hunk.serial);
+          hunk_show(&hunk, stderr);
+        }
         return -1;
     }
     debug("biggest_line_num: %d, input_file_num: %d, output_file_num: %d",

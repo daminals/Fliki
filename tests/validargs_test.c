@@ -6,7 +6,7 @@
 
 static char *progname = "bin/fliki";
 
-Test(basecode_suite, validargs_no_patch_quiet_mode_test) {
+Test(validargs_suite, validargs_no_patch_quiet_mode_test) {
     char *argv[] = {progname, "-n", "-q", "mydiffs", NULL};
     int argc = (sizeof(argv) / sizeof(char *)) - 1;
     int ret = validargs(argc, argv);
@@ -19,7 +19,7 @@ Test(basecode_suite, validargs_no_patch_quiet_mode_test) {
 		 opt, exp_opt);
 }
 
-Test(basecode_suite, validargs_help_failure) {
+Test(validargs_suite, validargs_help_failure) {
     char *argv[] = {progname, "-n","-h", NULL};
     int argc = (sizeof(argv) / sizeof(char *)) - 1;
     int ret = validargs(argc, argv);
@@ -32,7 +32,7 @@ Test(basecode_suite, validargs_help_failure) {
 		 flag, opt);
 }
 
-Test(basecode_suite, validargs_all_correct_test) {
+Test(validargs_suite, validargs_all_correct_test) {
     char *argv[] = {progname, "-q", "-n", "foo", NULL};
     int argc = (sizeof(argv) / sizeof(char *)) - 1;
     int exp_ret = 0;
@@ -45,7 +45,7 @@ Test(basecode_suite, validargs_all_correct_test) {
 		 opt, exp_opt);
 }
 
-Test(basecode_suite, validargs_multiple_files) {
+Test(validargs_suite, validargs_multiple_files) {
     char *argv[] = {progname, "foo", "bar", NULL};
     int argc = (sizeof(argv) / sizeof(char *)) - 1;
     int exp_ret = -1;

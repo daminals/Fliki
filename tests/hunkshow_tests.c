@@ -5,7 +5,7 @@
 #include <criterion/logging.h>
 
 
-Test(basecode_suite, fliki_hunk_show_empty_file1_test) {
+Test(hunkshow_suite, fliki_hunk_show_empty_file1_test) {
   // 0a1,5
   // hunk 1
   HUNK_TYPE hunk_type = HUNK_APPEND_TYPE;
@@ -35,7 +35,7 @@ Test(basecode_suite, fliki_hunk_show_empty_file1_test) {
   fclose(confirm_read);
 }
 
-Test(basecode_suite, fliki_hunk_show_file1_empty_test) {
+Test(hunkshow_suite, fliki_hunk_show_file1_empty_test) {
   // 1,5d0
   // hunk 1
   HUNK_TYPE hunk_type = HUNK_APPEND_TYPE;
@@ -63,7 +63,7 @@ Test(basecode_suite, fliki_hunk_show_file1_empty_test) {
   fclose(confirm_read);
 }
 
-Test(basecode_suite, fliki_hunk_show_hunk_max_test) {
+Test(hunkshow_suite, fliki_hunk_show_hunk_max_test) {
   // 0a1,600
   // hunk 1
   // open file rsrc/file1_file2.diff
@@ -106,7 +106,7 @@ Test(basecode_suite, fliki_hunk_show_hunk_max_test) {
   fclose(confirm_read);
 }
 
-Test(basecode_suite, fliki_hunk_show_hunk_max2_test) {
+Test(hunkshow_suite, fliki_hunk_show_hunk_max2_test) {
   // 0a1,53
   // hunk 1
   // open file rsrc/file1_file2.diff

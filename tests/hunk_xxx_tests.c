@@ -7,7 +7,7 @@
 
 static char *progname = "bin/fliki";
 
-Test(basecode_suite, fliki_hunk_next_file1_file2_test) {
+Test(hunk_xxx_suite, fliki_hunk_next_file1_file2_test) {
   // 1,2c1
   // hunk 1
   int hunk_old_start = 1;
@@ -39,7 +39,7 @@ Test(basecode_suite, fliki_hunk_next_file1_file2_test) {
                hunk_new_end);
 }
 
-// Test(basecode_suite, fliki_hunk_next_file1_file2_middleLine_test) {
+// Test(hunk_xxx_suite, fliki_hunk_next_file1_file2_middleLine_test) {
 //   // 3a3
 //   // hunk 2
 //   int hunk_old_start = 3;
@@ -75,7 +75,7 @@ Test(basecode_suite, fliki_hunk_next_file1_file2_test) {
 //                hunk_new_end);
 // }
 
-Test(basecode_suite, fliki_hunk_next_file1_file2_twice_test) {
+Test(hunk_xxx_suite, fliki_hunk_next_file1_file2_twice_test) {
   // 3a3
   // hunk 2
   int hunk_old_start = 3;
@@ -112,7 +112,7 @@ Test(basecode_suite, fliki_hunk_next_file1_file2_twice_test) {
                local_hunk_serial);
 }
 
-Test(basecode_suite, fliki_hunk_next_empty_file1_test) {
+Test(hunk_xxx_suite, fliki_hunk_next_empty_file1_test) {
   // 0a1,5
   // hunk 1
   int hunk_old_start = 0;
@@ -144,7 +144,7 @@ Test(basecode_suite, fliki_hunk_next_empty_file1_test) {
                hunk_new_end);
 }
 
-Test(basecode_suite, fliki_hunk_next_file1_empty_test) {
+Test(hunk_xxx_suite, fliki_hunk_next_file1_empty_test) {
   // 1,5d0
   // hunk 1
   int hunk_old_start = 1;
@@ -176,7 +176,7 @@ Test(basecode_suite, fliki_hunk_next_file1_empty_test) {
                hunk_new_end);
 }
 
-Test(basecode_suite, fliki_hunk_getc_file1_empty_test) {
+Test(hunk_xxx_suite, fliki_hunk_getc_file1_empty_test) {
   // 1,5d0
   // hunk 1
   HUNK_TYPE hunk_type = HUNK_DELETE_TYPE;
@@ -214,7 +214,7 @@ Test(basecode_suite, fliki_hunk_getc_file1_empty_test) {
   // check hunk
 }
 
-Test(basecode_suite, fliki_hunk_getc_empty_file1_test) {
+Test(hunk_xxx_suite, fliki_hunk_getc_empty_file1_test) {
   // 1,5d0
   // hunk 1
   HUNK_TYPE hunk_type = HUNK_APPEND_TYPE;
@@ -249,7 +249,7 @@ Test(basecode_suite, fliki_hunk_getc_empty_file1_test) {
 }
 
 
-Test(basecode_suite, fliki_hunk_getc_file1_file2_test) {
+Test(hunk_xxx_suite, fliki_hunk_getc_file1_file2_test) {
   // 1,2c1
   // 3a3
   // 5d4
@@ -334,7 +334,7 @@ Test(basecode_suite, fliki_hunk_getc_file1_file2_test) {
   // check hunk
 }
 
-Test(basecode_suite, fliki_hunk_getc_file1_file2_error_test) {
+Test(hunk_xxx_suite, fliki_hunk_getc_file1_file2_error_test) {
   // 1,2c1
   // 3a3
   // 5d4
@@ -380,7 +380,7 @@ Test(basecode_suite, fliki_hunk_getc_file1_file2_error_test) {
   // check hunk
 }
 
-Test(basecode_suite, fliki_hunk_getc_b4_hunk_next_test) {
+Test(hunk_xxx_suite, fliki_hunk_getc_b4_hunk_next_test) {
   // 1,5d0
   // hunk 1
   // HUNK_TYPE hunk_type = HUNK_DELETE_TYPE;
@@ -394,7 +394,7 @@ Test(basecode_suite, fliki_hunk_getc_b4_hunk_next_test) {
   // should throw err
 }
 
-Test(basecode_suite, fliki_hunk_next_EOF_test) {
+Test(hunk_xxx_suite, fliki_hunk_next_EOF_test) {
   // 1,5d0
   // hunk 1
   // HUNK_TYPE hunk_type = HUNK_DELETE_TYPE;

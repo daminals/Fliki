@@ -6,7 +6,7 @@
 
 
 
-Test(basecode_suite, fliki_buffer_file1_empty_test) {
+Test(buffer_test_suite, fliki_buffer_file1_empty_test) {
   // 1,5d0
   // hunk 1
   // HUNK_TYPE hunk_type = HUNK_DELETE_TYPE;
@@ -43,7 +43,7 @@ Test(basecode_suite, fliki_buffer_file1_empty_test) {
 
 }
 
-Test(basecode_suite, fliki_buffer_empty_file1_test) {
+Test(buffer_test_suite, fliki_buffer_empty_file1_test) {
   // 0a1,5
   // hunk 1
   FILE *file = fopen("rsrc/empty_file1.diff", "r");
@@ -76,7 +76,7 @@ Test(basecode_suite, fliki_buffer_empty_file1_test) {
   }
 }
 
-Test(basecode_suite, fliki_buffer_file1_file2_test) {
+Test(buffer_test_suite, fliki_buffer_file1_file2_test) {
   // 1,2c1
   // hunk 1
   FILE *file = fopen("rsrc/file1_file2.diff", "r");
@@ -138,7 +138,7 @@ Test(basecode_suite, fliki_buffer_file1_file2_test) {
   }
 }
 
-// Test(basecode_suite, fliki_buffer_additions_truncate_test) {
+// Test(buffer_test_suite, fliki_buffer_additions_truncate_test) {
 //   // 0a1,5
 //   // hunk 1
 //   FILE *file = fopen("rsrc/empty_file1.diff", "r");
@@ -171,7 +171,7 @@ Test(basecode_suite, fliki_buffer_file1_file2_test) {
 //   cr_assert_eq(0,hunk_additions_buffer[-2], "Buffer check failed at element %d -- Expected: %c (%d) | Got: %c (%d)", -2,0,0,hunk_additions_buffer[-2], hunk_additions_buffer[-2]);
 // }
 
-// Test(basecode_suite, fliki_buffer_deletions_truncate_test) {
+// Test(buffer_test_suite, fliki_buffer_deletions_truncate_test) {
 //   // 1,5d0
 //   // hunk 1
 //   FILE *file = fopen("rsrc/file1_empty.diff", "r");
@@ -196,7 +196,7 @@ Test(basecode_suite, fliki_buffer_file1_file2_test) {
 //   cr_assert_eq(0,hunk_deletions_buffer[-2], "Buffer check failed at element %d -- Expected: %c (%d) | Got: %c (%d)", -2,0,0,hunk_deletions_buffer[-2], hunk_deletions_buffer[-2]);
 // }
 
-Test(basecode_suite, fliki_buffer_additions_truncate_test2) {
+Test(buffer_test_suite, fliki_buffer_additions_truncate_test2) {
   // 0a1,600
   // hunk 1
   FILE *file = fopen("rsrc/hunk_max.diff", "r");

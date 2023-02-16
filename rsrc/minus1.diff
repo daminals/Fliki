@@ -1,0 +1,11 @@
+1,5c1,4
+< this is completely different
+< This line is in common between file1 and file2.
+< Here is another line that they have in common.
+< Among us sussy baka
+< hello world
+---
+> this file is created by me
+> hello����
+> � is a bad char. so is ÿ :>
+> can you see it?

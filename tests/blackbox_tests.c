@@ -5,6 +5,27 @@
 #include "fliki.h"
 #include "global.h"
 
+Test(blackbox, fliki_minus_1_blackbox) { // -1 character
+  char *cmd =
+      "bin/fliki rsrc/minus1.diff < rsrc/file3 > "
+      "test_output/minus1.out";
+  char *cmp = "cmp test_output/minus1.out rsrc/minus1";
+
+  FILE* a = fopen("test_output/minusch.out", "w");
+  fputc(-2, a);
+  fputc(-3, a);
+  fputc(-4, a);
+  fputc(1000, a);
+  fclose(a);
+
+  int return_code = WEXITSTATUS(system(cmd));
+  cr_assert_eq(return_code, EXIT_SUCCESS,
+               "Program exited with 0x%x instead of EXIT_SUCCESS", return_code);
+  return_code = WEXITSTATUS(system(cmp));
+  cr_assert_eq(return_code, EXIT_SUCCESS,
+               "Program output did not match reference output.");
+}
+
 Test(blackbox, fliki_file2_file3_blackbox) {
   char *cmd =
       "bin/fliki rsrc/file2_file3.diff < rsrc/file2 > "

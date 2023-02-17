@@ -75,7 +75,7 @@ Test(error_suite, fliki_hunk_next_unexpected_eof_test) {
 Test(error_suite, fliki_blackbox_unexpected_eof_test) {
   char *cmd =
       "bin/fliki rsrc/baddiffs/eof.diff < rsrc/empty 2> "
-      "test_output/blackbox_unexpected_eof.out";
+      "test_output/blackbox_unexpected_eof.out 1> test_output/irrelevant.out";
   char *cmp = "cmp test_output/blackbox_unexpected_eof.out rsrc/file1";
 
   int return_code = WEXITSTATUS(system(cmd));
@@ -99,8 +99,8 @@ Test(error_suite, fliki_hunk_getc_unexpected_eof_test) {
     hunk_getc(&hunk, file);
   }
   int c = hunk_getc(&hunk, file);
-  printf("c: %d",c);
-  // cr_assert_eq(c, ERR, "Expected ERR, got %d", c);
+  // printf("c: %d",c);
+  cr_assert_eq(c, ERR, "Expected ERR, got %d", c);
   fclose(file);
   // check hunk
 }
@@ -123,7 +123,7 @@ Test(error_suite, fliki_hunk_next_bad_header_append_test) {
 Test(error_suite, fliki_blackbox_bad_header_append_test) {
   char *cmd =
       "bin/fliki rsrc/baddiffs/append_input.diff < rsrc/empty 2> "
-      "test_output/blackbox_append_input.out";
+      "test_output/blackbox_append_input.out  1> test_output/irrelevant.out";
   char *cmp = "cmp test_output/blackbox_append_input.out rsrc/file1";
 
   int return_code = WEXITSTATUS(system(cmd));
@@ -151,7 +151,7 @@ Test(error_suite, fliki_hunk_next_bad_header_delete_test) {
 Test(error_suite, fliki_blackbox_bad_header_delete_test) {
   char *cmd =
       "bin/fliki rsrc/baddiffs/delete_input.diff < rsrc/empty 2> "
-      "test_output/blackbox_delete_input.out";
+      "test_output/blackbox_delete_input.out  1> test_output/irrelevant.out";
   char *cmp = "cmp test_output/blackbox_delete_input.out rsrc/file1";
 
   int return_code = WEXITSTATUS(system(cmd));

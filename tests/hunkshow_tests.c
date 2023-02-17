@@ -11,7 +11,7 @@ Test(hunkshow_suite, fliki_hunk_show_empty_file1_test) {
   HUNK_TYPE hunk_type = HUNK_APPEND_TYPE;
   // open file rsrc/file1_file2.diff
   FILE *file = fopen("rsrc/empty_file1.diff", "r");
-  FILE *testread = fopen("rsrc/empty_file1.diff", "r");
+  // FILE *testread = fopen("rsrc/empty_file1.diff", "r");
   FILE *testwrite = fopen("test_output/hunkshow_empty_file1.out", "w");
   // define an array of strings
   // read hunk
@@ -22,17 +22,23 @@ Test(hunkshow_suite, fliki_hunk_show_empty_file1_test) {
   fclose(file);
   hunk_show(&hunk, testwrite);
   fclose(testwrite);
-  FILE *confirm_read = fopen("test_output/hunkshow_empty_file1.out", "r");
-  // hunk show should print the same chars as empty_file1.diff
-  int i=0;
-  while(!feof(testread)) {
-    char c = fgetc(testread);
-    char d = fgetc(confirm_read);
-    cr_assert_eq(c, d, "hunk_show() failed to print the same chars as the diff file. Error at location: %d, '%c' (%d) != '%c' (%d)", i,c, c, d, d);
-    i++;
-  }
-  fclose(testread);
-  fclose(confirm_read);
+  char *cmp = "cmp test_output/hunkshow_empty_file1.out rsrc/empty_file1.diff";
+
+  int return_code = WEXITSTATUS(system(cmp));
+  cr_assert_eq(return_code, EXIT_SUCCESS,
+               "Program exited with 0x%x instead of EXIT_SUCCESS", return_code);
+
+  // FILE *confirm_read = fopen("test_output/hunkshow_empty_file1.out", "r");
+  // // hunk show should print the same chars as empty_file1.diff
+  // int i=0;
+  // while(!feof(testread)) {
+  //   char c = fgetc(testread);
+  //   char d = fgetc(confirm_read);
+  //   cr_assert_eq(c, d, "hunk_show() failed to print the same chars as the diff file. Error at location: %d, '%c' (%d) != '%c' (%d)", i,c, c, d, d);
+  //   i++;
+  // }
+  // fclose(testread);
+  // fclose(confirm_read);
 }
 
 Test(hunkshow_suite, fliki_hunk_show_file1_empty_test) {
@@ -41,7 +47,7 @@ Test(hunkshow_suite, fliki_hunk_show_file1_empty_test) {
   HUNK_TYPE hunk_type = HUNK_APPEND_TYPE;
   // open file rsrc/file1_file2.diff
   FILE *file = fopen("rsrc/file1_empty.diff", "r");
-  FILE *testread = fopen("rsrc/file1_empty.diff", "r");
+  // FILE *testread = fopen("rsrc/file1_empty.diff", "r");
   FILE *testwrite = fopen("test_output/hunkshow_file1_empty.out", "w");
   // define an array of strings
   // read hunk
@@ -52,15 +58,22 @@ Test(hunkshow_suite, fliki_hunk_show_file1_empty_test) {
   fclose(file);
   hunk_show(&hunk, testwrite);
   fclose(testwrite);
-  FILE *confirm_read = fopen("test_output/hunkshow_file1_empty.out", "r");
-  // hunk show should print the same chars as empty_file1.diff
-  while(!feof(testread)) {
-    char c = fgetc(testread);
-    char d = fgetc(confirm_read);
-    cr_assert_eq(c, d, "hunk_show() failed to print the same chars as the diff file. Error at char %c (%d) and %c (%d)", c, c, d, d);
-  }
-  fclose(testread);
-  fclose(confirm_read);
+
+  char *cmp = "cmp test_output/hunkshow_file1_empty.out rsrc/file1_empty.diff";
+
+  int return_code = WEXITSTATUS(system(cmp));
+  cr_assert_eq(return_code, EXIT_SUCCESS,
+               "Program exited with 0x%x instead of EXIT_SUCCESS", return_code);
+
+  // FILE *confirm_read = fopen("test_output/hunkshow_file1_empty.out", "r");
+  // // hunk show should print the same chars as empty_file1.diff
+  // while(!feof(testread)) {
+  //   char c = fgetc(testread);
+  //   char d = fgetc(confirm_read);
+  //   cr_assert_eq(c, d, "hunk_show() failed to print the same chars as the diff file. Error at char %c (%d) and %c (%d)", c, c, d, d);
+  // }
+  // fclose(testread);
+  // fclose(confirm_read);
 }
 
 Test(hunkshow_suite, fliki_hunk_show_hunk_max_test) {
@@ -75,7 +88,8 @@ Test(hunkshow_suite, fliki_hunk_show_hunk_max_test) {
   HUNK hunk;
   hunk_next(&hunk, file);
   // read hunk
-  for (int i=0;i<600;i++) hunk_getc(&hunk, file);
+  char c;
+  while (c!=EOS) c=hunk_getc(&hunk, file);
   fclose(file);
   hunk_show(&hunk, testwrite);
   fclose(testwrite);
@@ -151,3 +165,58 @@ Test(hunkshow_suite, fliki_hunk_show_hunk_max2_test) {
   fclose(testread);
   fclose(confirm_read);
 }
+
+// Test(hunkshow_suite, fliki_hunk_show_hunk_max3_test) {
+//   // 0a1,53
+//   // hunk 1
+//   // open file rsrc/file1_file2.diff
+//   FILE *file = fopen("rsrc/hunk_max3.diff", "r");
+//   FILE *testread = fopen("rsrc/hunk_max3.diff", "r");
+//   FILE *testwrite = fopen("test_output/hunkshow_hunk_max3.out", "w");
+//   // file ends at exactly '\n', preventing truncation (e.g. hunk_addition_buffer[511] == '\n')
+//   // define an array of strings
+//   // read hunk
+//   HUNK hunk;
+//   hunk_next(&hunk, file);
+//   // read hunk
+//   for (int i=0;i<1200;i++) hunk_getc(&hunk, file);
+//   fclose(file);
+//   hunk_show(&hunk, testwrite);
+//   fclose(testwrite);
+//   FILE *confirm_read = fopen("test_output/hunkshow_hunk_max3.out", "r");
+  
+//   // for (int k=490;k<HUNK_MAX;k++) printf("%c(%d), ", hunk_additions_buffer[k],hunk_additions_buffer[k]);
+
+//   // hunk show should print the same chars as empty_file1.diff
+//   int i=0;
+//   while(i<HUNK_MAX+5) { // plus 7 due to header, -1 due to hunk_max limit
+//     char c = fgetc(testread);
+//     char d = fgetc(confirm_read);
+//     cr_assert_eq(c, d, "hunk_show() failed to print the same chars as the diff file. Error at location: %d, '%c' (%d) != '%c' (%d)", i,c, c, d, d);
+//     i++;
+//     // printf("%c", c);
+//   }
+//   // loop three times
+//   for (int j=0;j<3;j++) {
+//     char d = fgetc(confirm_read);
+//     cr_assert_eq('.', d, "hunk_show() failed to print the same chars as the diff file. Error at location: %d, '%c' (%d) != '%c' (%d)", j+i,'.', '.', d, d);
+//     i++;
+//   }
+//   // additions buffer
+//   while(i<HUNK_MAX-2) { // plus 7 due to header, -1 due to hunk_max limit
+//     char c = fgetc(testread);
+//     char d = fgetc(confirm_read);
+//     cr_assert_eq(c, d, "hunk_show() failed to print the same chars as the diff file. Error at location: %d, '%c' (%d) != '%c' (%d)", i,c, c, d, d);
+//     i++;
+//     // printf("%c", c);
+//   }
+  
+
+//   // char d = fgetc(confirm_read);
+//   // cr_assert_eq('\n', d, "hunk_show() failed to print the same chars as the diff file. Error at location: %d, '%c' (%d) != '%c' (%d)", i++,'newline', 'newline', d, d);
+//   // d = fgetc(confirm_read);
+//   // cr_assert_eq(EOF, d, "hunk_show() failed to print the same chars as the diff file. Error at location: %d, '%c' (%d) != '%c' (%d)", i++,'EOF', 'EOF', d, d);
+
+//   fclose(testread);
+//   fclose(confirm_read);
+// }

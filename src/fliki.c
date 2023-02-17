@@ -604,6 +604,7 @@ void hunk_show(HUNK *hp, FILE *out) {
   }
   fprintf(out, "\n");
   // print all chars in respective buffer
+  if (did_hunk_next_run==0) return;
   if (hp->type == 1) {
     // for (int i = 0; i < HUNK_MAX; i++) {
     // fprintf(out, "(%d)%d, ", i,get_arr(hunk_additions_buffer, i));
@@ -724,7 +725,7 @@ static int patch_delete_func(HUNK hunk, FILE *in, FILE *out, FILE *diff) {
     if (hunk_char != input_char) {
       if (!(global_options & 4)) {
         fprintf(stderr,
-                "Error: Non-matching input characters [%c!=%c] in hunk %d\n",
+                "Error: Non-matching input characters {%c!=%c} in hunk %d\n",
                 hunk_char, input_char, hunk.serial);
         hunk_show(&hunk, stderr);
       }

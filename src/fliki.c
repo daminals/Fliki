@@ -97,7 +97,7 @@ static int get_num(FILE *file, int start) {
   return num;
 }
 
-static char get_hunk_range(HUNK *hp, FILE *in, char c, int old_range) {
+static int get_hunk_range(HUNK *hp, FILE *in, char c, int old_range) {
   if (!(c >= '0' && c <= '9')) return ERR;  // bad format
   // read the hunk header
   int start_int = get_num(in, c);
@@ -198,6 +198,20 @@ static int hunk_next_reset() {
   return 0;
 }
 
+static int invalid_hunk_header(HUNK *hp) {
+  switch (hp->type) {
+    case HUNK_APPEND_TYPE:
+      if (hp->old_start != hp->old_end) return ERR;
+      break;
+    case HUNK_DELETE_TYPE:
+      if (hp->new_start != hp->new_end) return ERR;
+      break;
+    default:
+      break;
+  }
+  return 1;
+}
+
 /**
  * @brief Get the header of the next hunk in a diff file.
  * @details This function advances to the beginning of the next hunk
@@ -219,19 +233,6 @@ int hunk_next(HUNK *hp, FILE *in) {
 
   // if hunk is initialized, skip to next hunk
 
-  // while (start_char == '>' || start_char == '<' || start_char == '-') {
-  // actually should check if theres a newline
-
-  // while (!(start_char >= '0' && start_char <= '9')) {
-  //   // loop until find a newline, then check if number
-  //   while ((c = fgetc(in)) != '\n') {
-  //     if (c == EOF) return EOF;
-  //   }
-  //   c = fgetc(in);  // first char in a line
-  //   // debug("c is %c in start char loop", c);
-  //   start_char = c;
-  // }
-
   // printf("hunk run:%d\n\n",did_hunk_next_run);
   char c;
   while (did_hunk_next_run == 0) {
@@ -250,45 +251,6 @@ int hunk_next(HUNK *hp, FILE *in) {
     return EOF;
   }
 
-  // char start_char = c;
-
-  // broken hunk_getc version. fix if u have time
-  // if (did_hunk_next_run != 0) {  // causing error with >
-  //   debug("in start char loop");
-  //   // while ((c = fgetc(in)) != '\n') {
-  //   //   if (c == EOF) return EOF;
-  //   // }
-  //   // c = fgetc(in);  // first char in a line
-  //   // start_char = c;
-  //   while (c != EOS && c != ERR) {
-  //     c = hunk_getc(hp, in);
-  //   }
-  //   if (c==ERR) return ERR;
-  //   // c = hunk_getc(hp, in);
-  //   info("c is %c(%d) - first EOS", c,c);
-  //   if (hp->type == HUNK_CHANGE_TYPE) {
-  //     c = hunk_getc(hp, in);
-  //     while (c != EOS && c != ERR) {
-  //       c = hunk_getc(hp, in);
-  //     }
-  //     if (c==ERR) return ERR;
-  //     info("c is %c(%d) - second EOS", c,c);
-  //   }
-  //   // if (c == ERR) return ERR;
-  //   error("c is %d", c);
-  //   did_hunk_next_run = 0;
-  //   return hunk_next(hp, in);
-  // } else {
-  //   c = fgetc(in);
-  //   error("fresh char c is %d", c);
-  // }
-  // did_hunk_next_run = 1;
-  // info("c is %c after prev_char", c);
-  // if (c == EOF) {
-  //   return EOF;
-  // }
-  // end broken hunkgetc version of this code
-
   // this is the start of the header signature
   // if c is a digit, then it is the start of the hunk header
   // this section will get the old start and old end of the hunk
@@ -305,6 +267,7 @@ int hunk_next(HUNK *hp, FILE *in) {
     // if single line_num, start=end, set hunk type
     return ERR;  // bad format
   }
+
   // debug("processed char and hunk type");
 
   // continue reading the header
@@ -313,6 +276,10 @@ int hunk_next(HUNK *hp, FILE *in) {
   // debug("c after registering hunk type is %c", c);
   c = get_hunk_range(hp, in, c, 0);
   // debug("finished hunk range 2. header sig should be done. c is %c btw", c);
+  if (invalid_hunk_header(hp) == ERR) {
+    return ERR;
+  }
+
   newline_prev = 1;
   return 0;
 }
@@ -521,7 +488,8 @@ int hunk_getc(HUNK *hp, FILE *in) {
     if (track_change_type == 1) switch_addition_deletion_type = 1;
   }
   int hunk_return = hunk_switchc(hp, in, c, switch_addition_deletion_type);
-  if (hunk_return == EOS || hunk_return == EOF || hunk_return == ERR)
+  if (hunk_return==EOF) {return_error=1; return ERR;}
+  if (hunk_return == EOS || hunk_return == ERR)
     return hunk_return;
   // buffer functionality
   switch (switch_addition_deletion_type) {

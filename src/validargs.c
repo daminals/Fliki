@@ -68,6 +68,7 @@ int validargs(int argc, char **argv) {
       // printf("-q: %ld",global_options);
     } else if (strEqlz(get_arr_char(argv, i), "-h") == 1) {
       if (i != 1) {
+        // fprintf(stderr, "-h should be the first argument");
         // printf("help option is not first argument: %s", get_arr_char(argv, i));
         return -1;  // exit failure
       }

@@ -30,7 +30,7 @@ static int count_deletions = 0;
  * It returns the value of the array at the given index.
  */
 char set_arr(char *arr, int i, int item) { 
-  // debug("setting arr[%d] to %d", i, item);
+  // debug("setting arr{%d} to %d", i, item);
   // info("count is %d", count_additions);
   return *(arr + i) = item; 
   }
@@ -145,7 +145,7 @@ int add_to_deletion_buffer(char item) {
   //   buffer = hunk_deletions_buffer;
   //   index = deletions_index;
   //   count = ++count_deletions;
-  // debug("Deletions buffer [index:%d] \nAdding item: %c (%d)", count_deletions,item,item);
+  // debug("Deletions buffer {index:%d} \nAdding item: %c (%d)", count_deletions,item,item);
   ++count_deletions;
   // debug("count_deletions: %d", count_deletions);
   if (add_to_buffer(hunk_deletions_buffer, deletions_index, count_deletions,

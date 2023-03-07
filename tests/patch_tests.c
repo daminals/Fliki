@@ -12,7 +12,7 @@ Test(patch, fliki_clone_file) {
   patch(in, diff, out);
   char *cmp = "cmp test_output/file2.out rsrc/clone.out";
 
-  return_code = WEXITSTATUS(system(cmp));
+  int return_code = WEXITSTATUS(system(cmp));
   cr_assert_eq(return_code, EXIT_SUCCESS,
                "Program output did not match reference output.");
 }

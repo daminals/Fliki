@@ -16,7 +16,7 @@ Argument validity is checked in the `valid_args` function, and reads the three f
 To use Fliki, you will need to have C installed on your computer. You can download the source code from the GitHub repository, or you can clone the repository using the following command:
 
 ```bash
-git clone https://github.com/daminals/Fliki.git
+git clone https://github.com/daminals/fliki.git
 ```
 
 Once you have downloaded or cloned the repository, navigate to the directory and run the following command to compile the code:

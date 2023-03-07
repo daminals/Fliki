@@ -57,3 +57,13 @@ Test(validargs_suite, validargs_multiple_files) {
     cr_assert_eq(opt, exp_opt, "Invalid options settings.  Got: 0x%x | Expected: 0x%x",
 		 opt, exp_opt);
 }
+
+Test(validargs_suite, options_modified_on_error, .timeout = 5) {
+    char *argv[] = {progname, "-n", "-b", "b_bad_option", NULL};
+    int argc = (sizeof(argv) / sizeof(char *)) - 1;
+    int ret = validargs(argc, argv);
+    int exp_ret = -1;
+    int opt = global_options;
+    int exp_opt = 0;
+    cr_assert_eq(opt, exp_opt, "Invalid return for validargs.  Got: %d | Expected: %d", opt, exp_opt);
+}

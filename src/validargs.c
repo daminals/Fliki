@@ -37,22 +37,11 @@ int validargs(int argc, char **argv) {
 
   // checks if there are no arguments. if there are none, return failure
   if (argc == 1) {
-    // printf("no arguments: %d", argc);
     return -1;  // exit failure
   }
 
-  // if (argc == 2) {
-  //   if (is_file(get_arr_char(argv, argc - 1))) {  // last argument
-  //     return 0;
-  //   } else {
-  //     return -1;
-  //   }
-  // }
-
   // checks if -h exists. if it does, return success
   if (strEqlz(get_arr_char(argv, 1), "-h")) {
-    // printf("%s: this worked and says a lot about society\n",
-    // get_arr_char(argv,1));
     global_options = global_options | HELP_OPTION;
     return 0;  // exit success
   }
@@ -68,46 +57,31 @@ int validargs(int argc, char **argv) {
       // printf("-q: %ld",global_options);
     } else if (strEqlz(get_arr_char(argv, i), "-h") == 1) {
       if (i != 1) {
-        // fprintf(stderr, "-h should be the first argument");
-        // printf("help option is not first argument: %s", get_arr_char(argv, i));
         return -1;  // exit failure
       }
     } else {
-      // printf("option that doesn't exist: %s; ", get_arr_char(argv, i));
+      global_options = 0x0; // reset if bad option
       return -1;  // exit failure
       // option that doesn't exist
     }
     i++;
   }
-  // printf("%ld", global_options);
 
   // if -h doesn't exist, check if the last argument is a file then open the file
   if (!is_file(get_arr_char(argv, argc - 1))) {  // last argument
-    // printf("last argument is not a file: %s", get_arr_char(argv, argc-1));
     return -1;
   } else {
-    // printf("last argument is a file: %s", get_arr_char(argv, argc-1));
     diff_filename = get_arr_char(argv, argc - 1);
   }
-
-  // if no global options are set, return failure
-  // if (global_options == 0) {
-  //   // printf("no global options set: %ld\n", global_options);
-  //   return -1;
-  // }
-
-  // abort();
   return 0;
 }
 
 int strEqlz(char *str1, char *str2) {
   if (strLen(str1) > strLen(str2)) {
-    // printf("different lengths");
     return 0;
   }
   int i = 0;
   while (*(str1 + i) == *(str2 + i) && *(str1 + i) != '\0') {
-    // printf("%d:%c\n", i,*(str1 + i));
     i++;
   }
   if (i != strLen(str1)) {
@@ -125,12 +99,5 @@ int strLen(char *str1) {
 }
 
 static int is_file(char *filename) {
-  // a file is anything that doesn't start with a dash i guess
   return *(filename + 0) != '-';
-  // FILE *file;
-  // if ((file = fopen(filename, "r"))) {
-  //   fclose(file);
-  //   return 1;
-  // }
-  // return 0;
 }

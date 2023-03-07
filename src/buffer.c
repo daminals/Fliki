@@ -5,7 +5,6 @@
 #include "funcs.h"
 #include "global.h"
 
-// i love global variables
 /*
  * This is the buffer for the index of hunk deletions.
  * Stores where most recent length byte is

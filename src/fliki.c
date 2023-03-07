@@ -76,10 +76,8 @@ static int read_file(FILE *file) {
 FILE *open_file(char *filename) {
   FILE *file = fopen(filename, "r");
   if (file == NULL) {
-    // printf("file is null");
     return NULL;
   }
-  // read_file(file);
   return file;
 }
 
@@ -92,7 +90,6 @@ static int get_num(FILE *file, int start) {
     c = fgetc(file);
     // debug("c=%c",c);
   }
-  // c = fgetc(file);  // next char when done counting
   ungetc(c, file);
   return num;
 }
@@ -104,15 +101,6 @@ static int get_hunk_range(HUNK *hp, FILE *in, char c, int old_range) {
   // debug("start_int: %d", start_int);
 
   c = fgetc(in);  // undo ungetc, update c to current item
-
-  // debug("is c comma?: %c", c);
-  // complete the start_int
-  // if (c >= '0' && c <= '9') {
-  //   // if multiple digits, continue counting
-  //   start_int = get_num(in, start_int);
-  //   debug("start_int: %d", start_int);
-  //   c = fgetc(in);
-  // } else
   if (c == EOF) return ERR;
   if (old_range == 1) {
     hp->old_start = start_int;
@@ -123,7 +111,6 @@ static int get_hunk_range(HUNK *hp, FILE *in, char c, int old_range) {
 
   // continue reading the header
   // get end int
-  // debug("after start_int c: %c", c);
   if (c == ',') {
     int end_int;
     c = fgetc(in);
@@ -136,14 +123,7 @@ static int get_hunk_range(HUNK *hp, FILE *in, char c, int old_range) {
       hp->type = -1;
       return ERR;  // makes no sense
     }
-    // continue if necessary
-    // if (!(c == '\n' || c == EOF)) {
-    //   if (c >= '0' && c <= '9') {
-    //     end_int = get_num(in, end_int);
-    //   } else
-    // if (c == '\n' || c == EOF)
-    //     return ERR;
-    // }
+
     if (old_range == 1) {
       hp->old_end = end_int;
     } else {
@@ -294,8 +274,6 @@ int hunk_read_newline(int c, char check, int expected_line_nums, FILE *in,
       "current_line_nums=%d, hunk type=%d",
       c, c, check, expected_line_nums, current_line_nums, hp->type);
 
-  // if c is number
-  // debug("made it here, c is %d", c);
   if (c == EOF || (c >= '0' && c <= '9')) {
     // debug("expected line nums is %d, current line nums is %d",
     //       expected_line_nums, current_line_nums);
@@ -304,7 +282,6 @@ int hunk_read_newline(int c, char check, int expected_line_nums, FILE *in,
       warn("c has been ungot to %c", c);
       ungetc(c, in);
       newline_prev = 1;  // reset newline prev
-      // debug("post eof c is %c", c);
       // if this is new line after end of hunk, then return EOS
       // and go back one to preserve header
       hunk_getc_EOSERR++;
@@ -354,19 +331,11 @@ int hunk_consider_newline(int c, FILE *in, HUNK *hp, int expected_line_nums,
   if (c == '\n') {
     newline_prev = 1;
     current_line_nums++;
-    // if ((expected_line_nums < current_line_nums) &&
-    // (((hp->type==HUNK_CHANGE_TYPE) && (track_change_type==1)) ||
-    // (hp->type!=HUNK_CHANGE_TYPE)) ) return ERR;
     return c;
   }
 
-  // debug("current line nums is %d, expected is %d", current_line_nums,
-  //       expected_line_nums);
-
   if (newline_prev == 1) {
     newline_prev = 0;
-    // debug("new line slay");
-    // c = fgetc(in); // first char in a line
     // check if changing from addition to deletion
     if (current_line_nums == 0) current_line_nums++;
     if (if_dash == 1) {
@@ -394,8 +363,6 @@ int hunk_consider_newline(int c, FILE *in, HUNK *hp, int expected_line_nums,
         return EOS;  // this is for change hunks
         // return hunk_getc(hp, in);
       } else {
-        // if ((expected_line_nums < current_line_nums)) return ERR;
-        // if its not a dashed line and line num crossed threshold, return ERR
         return hunk_read_newline(c, check, expected_line_nums, in, hp);
       }
     } else {
@@ -786,11 +753,23 @@ static int patch_delete_func(HUNK hunk, FILE *in, FILE *out, FILE *diff) {
  */
 
 int patch(FILE *in, FILE *out, FILE *diff) {
-  // TO BE IMPLEMENTED
   // read diff file
   HUNK hunk;
   int contin = hunk_next(&hunk, diff);
 
+  // check if diff file is empty
+  int clone_input_to_output = 0;
+  if (contin == EOF && global_hunk_serial==1) {
+    clone_input_to_output = 1;
+  } 
+
+  if (clone_input_to_output==1) {
+    int c;
+    while ((c = fgetc(in)) != EOF) {
+      fputc(c, out);
+    }
+    return 0;
+  }
   // if (global_options & 2) {  // -n:  no output. silence stdout
   // }
   // if (global_options & 4) {  // -q: quiet mode. silence stderr
@@ -808,7 +787,6 @@ int patch(FILE *in, FILE *out, FILE *diff) {
   biggest_line_num = hunk.old_start;
   output_file_num = 1;  // for additions, starts at line preceding addition
   input_file_num = 1;   // first affected line
-  // if (hunk.old_start>0)input_file_num++;
   while (contin != EOF) {
     if (contin == ERR) {
       if (!(global_options & 4)) {
@@ -833,25 +811,6 @@ int patch(FILE *in, FILE *out, FILE *diff) {
         "catch up to biggest_line_num: %d. input_file_num: %d. "
         "output_file_num: %d",
         biggest_line_num, input_file_num, output_file_num);
-    // while (delete_count > 0) {
-    //   char input_char = fgetc(in);
-    //   if (input_char == EOF) {
-    //     fprintf(stderr,
-    //             "Error: Symantic error in diff file, hunk %d start line is "
-    //             "larger than input file",
-    //             hunk.serial);
-    //     return -1;
-    //   }
-    //   // if (input_char == '\n') {
-    //   //   input_file_num++;
-    //   // }
-    //   delete_count--;
-    // }
-    // warn("%c == %c", hunk_char, input_char);
-    // if they are the same character even if wrong place does not be correct
-    // while (hunk.old_start != input_file_num && input_file_num !=
-    // output_file_num) {
-    // }
 
     switch (hunk.type) {
       case HUNK_APPEND_TYPE:

@@ -10,7 +10,7 @@ Test(patch, fliki_clone_file) {
   FILE* diff = fopen("rsrc/empty", "r");
   FILE* out = fopen("test_output/clone.out", "w");
   patch(in, diff, out);
-  char *cmp = "cmp test_output/file2.out rsrc/clone.out";
+  char *cmp = "cmp test_output/clone.out rsrc/file2";
 
   int return_code = WEXITSTATUS(system(cmp));
   cr_assert_eq(return_code, EXIT_SUCCESS,
